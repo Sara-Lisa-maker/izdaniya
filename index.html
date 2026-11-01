@@ -139,7 +139,6 @@ nav a:hover{opacity:1}
   font-family:var(--grotesk);
 }
 
-/* Окно с выпусками */
 .issues-screen{
   display:none;position:fixed;inset:0;z-index:200;
   background:var(--paper);overflow-y:auto;
@@ -164,7 +163,6 @@ nav a:hover{opacity:1}
   max-width:500px;line-height:1.7;margin-bottom:60px;
 }
 
-/* Сетка обложек */
 .issue-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -176,26 +174,47 @@ nav a:hover{opacity:1}
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  perspective: 1000px; /* Добавляем перспективу для 3D-эффекта */
 }
-.issue-cover {
+.issue-cover-wrap {
+  position: relative;
   width: 100%;
-  aspect-ratio: 3/4; /* Идеальные пропорции под твою картинку */
-  background-color: #d4cfc5;
-  background-size: cover;
-  background-position: center;
+  aspect-ratio: 3/4;
+  perspective: 1500px;
+  margin-bottom: 16px;
+}
+.issue-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border: 1px solid var(--line);
-  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s, filter 0.6s;
-  will-change: transform;
   backface-visibility: hidden;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s ease;
+  will-change: transform, opacity;
 }
-.issue-card:hover .issue-cover {
-  /* Возвращаем эффект 3D-поворота и подъема */
-  transform: translateY(-10px) rotateY(-8deg) rotateX(2deg) scale(1.02);
-  box-shadow: -10px 20px 40px rgba(0,0,0,0.15);
+.issue-img.front {
+  z-index: 2;
+  transform: rotateY(0deg);
+  transform-origin: left center;
 }
+.issue-img.back {
+  z-index: 1;
+  transform: rotateY(0deg);
+}
+.issue-card:hover .issue-img.front {
+  transform: rotateY(-180deg);
+  opacity: 0;
+}
+.issue-card:hover .issue-img.back {
+  transform: rotateY(0deg);
+  opacity: 1;
+  z-index: 3;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
 .issue-info {
-  margin-top: 16px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -252,7 +271,6 @@ footer{
 }
 footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-size:14px}
 
-/* АДАПТИВНОСТЬ */
 @media(max-width:1024px){
   .journal-grid{grid-template-columns:1fr 1fr;}
   .journal-card:last-child{grid-column:span 2; min-height:400px;}
@@ -297,15 +315,10 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
   .issues-title{font-size:64px;}
   .issues-sub{margin-bottom:40px; font-size:15px;}
   
-  /* Карточки выпусков на телефоне */
   .issue-grid { grid-template-columns: 1fr; gap: 32px; }
   .issue-name { font-size: 28px; }
-  
-  /* Отключаем 3D-наклон на телефонах (там нет наведения мыши) */
-  .issue-card:hover .issue-cover {
-    transform: none;
-    box-shadow: none;
-  }
+  .issue-card:hover .issue-img.front { transform: none; opacity: 1; }
+  .issue-card:hover .issue-img.back { opacity: 0; }
 }
 </style>
 </head>
@@ -412,7 +425,8 @@ const journalsData = {
         num: '01', 
         name: 'Ваби-саби', 
         date: '2 октября 2026', 
-        cover: 'img/kirei-cover-front.jpg',
+        coverFront: 'img/kirei-cover-front.jpg',
+        coverBack: 'img/kirei-cover-back.jpg',
         link: 'kirei-vypusk-01.html' 
       }
     ]
@@ -467,7 +481,10 @@ function openIssues(key, fallbackTitle){
       a.className = 'issue-card';
       a.href = iss.link;
       a.innerHTML = `
-        <div class="issue-cover" style="background-image: url('${iss.cover}');"></div>
+        <div class="issue-cover-wrap">
+          <img src="${iss.coverFront}" class="issue-img front" alt="Обложка">
+          <img src="${iss.coverBack}" class="issue-img back" alt="Задняя обложка">
+        </div>
         <div class="issue-info">
           <span class="issue-num">№${iss.num}</span>
           <span class="issue-name">${iss.name}</span>
