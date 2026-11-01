@@ -37,12 +37,12 @@ body{
 ::selection{background:var(--accent);color:var(--paper)}
 
 /* ========================================= */
-/* НОВЫЙ ЭКРАН ВХОДА (ОБЛОЖКА) */
+/* ОБЛОЖКА (Экран входа) */
 /* ========================================= */
 .entry-screen{
   position:fixed;inset:0;z-index:500;
-  background-color:var(--paper-light);
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-color:var(--dark); /* Темный фон, чтобы обложка выделялась */
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   display:flex;align-items:center;justify-content:center;
   transition:transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
   cursor:pointer;
@@ -54,50 +54,48 @@ body{
 
 .book-wrapper {
   position: relative;
-  width: 90%;
-  max-width: 420px;
-  aspect-ratio: 1 / 1.4;
-  perspective: 2000px;
+  width: 85%;
+  max-width: 500px; /* Увеличили максимальный размер */
+  /* Убрали aspect-ratio, чтобы картинка сохраняла свои пропорции */
+  perspective: 2500px;
 }
 
 .book-cover {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  border-radius: 2px 6px 6px 2px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.2), inset 3px 0 5px rgba(0,0,0,0.1);
+  height: auto;
+  display: block;
+  border-radius: 2px 8px 8px 2px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 4px 0 10px rgba(0,0,0,0.2);
   transition: transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 1.2s;
   transform-origin: left center;
-  z-index: 2;
 }
 .book-wrapper:hover .book-cover {
-  transform: rotateY(-15deg);
-  box-shadow: 15px 20px 50px rgba(0,0,0,0.3), inset 3px 0 5px rgba(0,0,0,0.1);
+  transform: rotateY(-15deg) scale(1.02);
+  box-shadow: 20px 30px 60px rgba(0,0,0,0.8), inset 4px 0 10px rgba(0,0,0,0.2);
 }
 
 .entry-hint-overlay {
   position: absolute;
-  bottom: -50px;
+  bottom: -60px;
   left: 0;
   width: 100%;
   text-align: center;
   font-family: var(--sans);
   font-size: 11px;
-  letter-spacing: .15em;
+  letter-spacing: .2em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--paper);
   animation: fadePulse 2.5s infinite;
 }
 
 @keyframes fadePulse {
-  0%, 100% { opacity: 0.4; }
+  0%, 100% { opacity: 0.3; }
   50% { opacity: 1; }
 }
 
+/* ========================================= */
+/* ОСНОВНОЙ САЙТ */
+/* ========================================= */
 .main-site{
   opacity:0;
   transition:opacity 1.5s ease-in-out 0.5s;
@@ -298,8 +296,8 @@ nav a:hover{opacity:1}
   nav ul{gap:16px;}
   nav a{font-size:11px;}
 
-  .book-wrapper { max-width: 320px; }
-  .entry-hint-overlay { bottom: -40px; font-size: 10px; }
+  .book-wrapper { max-width: 85vw; }
+  .entry-hint-overlay { bottom: -50px; font-size: 10px; }
 
   .forzats-screen{padding:40px 24px;}
   .forzats-screen p{font-size:22px;}
@@ -364,9 +362,11 @@ nav a:hover{opacity:1}
 
 <a href="#" class="to-top" id="to-top" title="Наверх">↑</a>
 
+<!-- Блок обложки -->
 <div class="entry-screen" id="entry-screen" onclick="openMagazine()">
   <div class="book-wrapper">
-    <div class="book-cover" style="background-image:url('img/kirei-cover-front.jpg');"></div>
+    <!-- Заменил div на img, чтобы картинка сама выстраивала высоту -->
+    <img src="img/kirei-cover-front.jpg" alt="Обложка Кирэй" class="book-cover">
     <div class="entry-hint-overlay">Нажмите, чтобы открыть</div>
   </div>
 </div>
