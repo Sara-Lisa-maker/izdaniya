@@ -139,14 +139,14 @@ nav a:hover{opacity:1}
   font-family:var(--grotesk);
 }
 
-/* ЭКРАН ВЫБОРА ВЫПУСКОВ */
+/* Окно с выпусками */
 .issues-screen{
   display:none;position:fixed;inset:0;z-index:200;
   background:var(--paper);overflow-y:auto;
 }
 .issues-screen.open{display:block}
 .issues-inner{
-  max-width:1200px;margin:0 auto;padding:120px 48px 80px;
+  max-width:1200px;margin:0 auto;padding:100px 48px 80px;
 }
 .back-btn{
   font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
@@ -164,91 +164,65 @@ nav a:hover{opacity:1}
   max-width:500px;line-height:1.7;margin-bottom:60px;
 }
 
-/* СЕТКА ДЛЯ ОБЛОЖЕК */
-.issue-grid{
-  display:flex;
-  gap: 40px;
-  flex-wrap: wrap;
+/* Сетка обложек */
+.issue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 48px;
 }
-
-/* 3D ОБЛОЖКА */
-.cover-container {
-  perspective: 1500px;
-  width: 280px;
-  height: 400px;
-  cursor: pointer;
-  text-decoration: none;
-  display: block;
-}
-
-.cover-book {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.cover-container:hover .cover-book {
-  transform: rotateY(180deg);
-}
-
-.cover-front, .cover-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 2px 8px 8px 2px;
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset 4px 0 10px rgba(0,0,0,0.1);
-}
-
-.cover-front {
-  background-color: var(--paper-light);
-  background-image: url('img/kirei-cover-front.jpg'); /* Наша обложка */
-}
-
-.cover-back {
-  background-color: var(--dark);
-  background-image: url('img/kirei-cover-back.jpg'); /* Задняя сторона */
-  transform: rotateY(180deg);
-  border-radius: 8px 2px 2px 8px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset -4px 0 10px rgba(0,0,0,0.1);
-}
-
-/* ИНФО ПОД ОБЛОЖКОЙ */
-.issue-info {
-  margin-top: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-.issue-info-left {
+.issue-card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
-.issue-info-num {
+.issue-cover {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background-color: #d4cfc5;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--line);
+  transition: transform 0.4s cubic-bezier(0.2, 0.6, 0.2, 1), box-shadow 0.4s;
+}
+.issue-card:hover .issue-cover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.1);
+}
+.issue-info {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+.issue-num {
   font-family: var(--grotesk);
   font-size: 11px;
   color: var(--muted);
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
 }
-.issue-info-name {
+.issue-name {
   font-family: var(--serif);
   font-size: 24px;
   font-weight: 400;
-  color: var(--ink);
-  letter-spacing: -.01em;
+  letter-spacing: -0.01em;
 }
-.issue-info-date {
+.issue-date {
   font-family: var(--sans);
   font-size: 11px;
-  color: var(--muted);
-  letter-spacing: .08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-top: 4px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+.issue-empty {
+  padding: 40px 0;
+  font-family: var(--body-serif);
+  font-size: 16px;
+  color: var(--muted);
 }
 
 .about{padding:120px 48px;border-top:1px solid var(--line)}
@@ -278,12 +252,13 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
 @media(max-width:1024px){
   .journal-grid{grid-template-columns:1fr 1fr;}
   .journal-card:last-child{grid-column:span 2; min-height:400px;}
+  .issue-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
 }
 
 @media(max-width:768px){
-  nav{padding:16px 24px;}
-  nav ul{gap:16px;}
-  nav a{font-size:11px;}
+  nav{padding:16px 24px}
+  nav ul{gap:16px}
+  nav a{font-size:11px}
   
   .hero{padding:0 24px 40px; justify-content:center;}
   .hero-top{position:static; margin-bottom:60px; flex-direction:column; gap:16px;}
@@ -318,18 +293,10 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
   .issues-title{font-size:64px;}
   .issues-sub{margin-bottom:40px; font-size:15px;}
   
-  /* Мобильная сетка обложек */
-  .issue-grid {
-    flex-direction: column;
-    align-items: center;
-    gap: 60px;
-  }
-  .cover-container {
-    width: 100%;
-    max-width: 340px;
-    height: auto;
-    aspect-ratio: 1 / 1.4;
-  }
+  /* Карточки выпусков на телефоне */
+  .issue-grid { grid-template-columns: 1fr; gap: 32px; }
+  .issue-cover { aspect-ratio: 4/5; }
+  .issue-name { font-size: 28px; }
 }
 </style>
 </head>
@@ -345,15 +312,15 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
 
 <header class="hero">
   <div class="hero-top">
-    <div class="hero-meta reveal">Независимые<br>печатные выпуски<br>в цифре</div>
-    <div class="hero-meta reveal" style="text-align:right">Санкт-Петербург<br>2026</div>
+    <div class="hero-meta reveal">Три издания.<br>Одна платформа.<br>2026</div>
+    <div class="hero-meta reveal" style="text-align:right">Независимые<br>печатные выпуски<br>в цифре</div>
   </div>
   <h1 class="hero-title reveal">
     <span class="thin">издания</span>
     Архив
   </h1>
   <div class="hero-desc reveal">
-    <p>Кирэй, Слой и Контур — разные взгляды на культуру, архитектуру и искусство. Каждый выпуск читается как цельный журнал.</p>
+    <p>Кирэй, Слой и Контур — три разных взгляда на культуру, архитектуру и искусство. Каждый выпуск читается как цельный журнал.</p>
     <div class="scroll-hint">листайте</div>
   </div>
 </header>
@@ -361,7 +328,7 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
 <section class="journals">
   <div class="section-label reveal">
     <span>Журналы</span>
-    <span>Каталог</span>
+    <span>03 издания</span>
   </div>
   <div class="journal-grid">
     <article class="journal-card reveal" onclick="openIssues('kirei', 'Кирэй')">
@@ -404,7 +371,7 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
   <div class="about-grid">
     <h2 class="reveal">О<br>проекте</h2>
     <div class="about-right reveal">
-      <p>Издания — это платформа для независимых журналов. Каждый выпуск существует как цельный объект: его не делят на статьи, он читается сверху вниз, как напечатанный журнал.</p>
+      <p>Издания — это платформа для трёх независимых журналов. Каждый выпуск существует как цельный объект: его не делят на статьи, он читается сверху вниз, как напечатанный журнал.</p>
       <p>Мы не публикуем новости. Мы делаем редкие, продуманные выпуски, к которым хочется возвращаться.</p>
       <p class="small">Редактор и автор: Сара-Лиза<br>Санкт-Петербург — 2026<br>li3233352@gmail.com</p>
     </div>
@@ -417,16 +384,12 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
   <div>li3233352@gmail.com</div>
 </footer>
 
-<!-- ЭКРАН ВЫБОРА ВЫПУСКОВ -->
 <div class="issues-screen" id="issues-screen">
   <div class="issues-inner">
     <button class="back-btn" onclick="closeIssues()">← Назад к журналам</button>
     <h1 class="issues-title" id="issues-title">Кирэй</h1>
     <p class="issues-sub" id="issues-sub">Выберите выпуск для чтения.</p>
-    
-    <div class="issue-grid" id="issue-grid">
-      <!-- Сюда JS будет вставлять обложки -->
-    </div>
+    <div class="issue-grid" id="issue-grid"></div>
   </div>
 </div>
 
@@ -440,9 +403,8 @@ const journalsData = {
         num: '01', 
         name: 'Ваби-саби', 
         date: '2 октября 2026', 
-        link: 'kirei-vypusk-01.html',
-        front: 'img/kirei-cover-front.jpg',
-        back: 'img/kirei-cover-back.jpg'
+        cover: 'img/kirei-cover-front.jpg',
+        link: 'kirei-vypusk-01.html' 
       }
     ]
   },
@@ -487,31 +449,21 @@ function openIssues(key, fallbackTitle){
   
   if(data.issues.length === 0){
     const empty = document.createElement('div');
-    empty.style.cssText = 'padding:40px 0;font-family:var(--body-serif);font-size:16px;color:var(--muted);width:100%;';
+    empty.className = 'issue-empty';
     empty.textContent = 'Выпуски скоро появятся.';
     grid.appendChild(empty);
   } else {
     data.issues.forEach(iss => {
       const a = document.createElement('a');
-      a.className = 'cover-container';
+      a.className = 'issue-card';
       a.href = iss.link;
-      
-      // Если картинок нет, ставим заглушки
-      const frontBg = iss.front ? `background-image: url('${iss.front}');` : 'background-color: #c9b8a0;';
-      const backBg = iss.back ? `background-image: url('${iss.back}');` : 'background-color: #2a2825;';
-      
       a.innerHTML = `
-        <div class="cover-book">
-          <div class="cover-front" style="${frontBg}"></div>
-          <div class="cover-back" style="${backBg}"></div>
-        </div>
+        <div class="issue-cover" style="background-image: url('${iss.cover}');"></div>
         <div class="issue-info">
-          <div class="issue-info-left">
-            <span class="issue-info-num">№${iss.num}</span>
-            <span class="issue-info-name">${iss.name}</span>
-          </div>
-          <span class="issue-info-date">${iss.date}</span>
+          <span class="issue-num">№${iss.num}</span>
+          <span class="issue-name">${iss.name}</span>
         </div>
+        <div class="issue-date">${iss.date}</div>
       `;
       grid.appendChild(a);
     });
