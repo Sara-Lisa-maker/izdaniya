@@ -180,8 +180,20 @@ nav a:hover{opacity:1}
   position: relative;
   width: 100%;
   aspect-ratio: 3/4;
-  perspective: 2000px;
+  perspective: 2500px;
   margin-bottom: 16px;
+}
+
+.issue-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+  transform-style: preserve-3d;
+}
+
+.issue-card:hover .issue-inner {
+  transform: rotateY(180deg);
 }
 
 .issue-img {
@@ -194,31 +206,20 @@ nav a:hover{opacity:1}
   background-color: #d4cfc5;
   border: 1px solid var(--line);
   backface-visibility: hidden;
-  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.9s ease;
-  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
 }
 
 .issue-img.front {
   z-index: 2;
   transform: rotateY(0deg);
-  transform-origin: left center;
 }
 
 .issue-img.back {
   z-index: 1;
-  transform: rotateY(-180deg);
-  transform-origin: right center;
-}
-
-.issue-card:hover .issue-img.front {
   transform: rotateY(180deg);
-  opacity: 0;
 }
 
 .issue-card:hover .issue-img.back {
-  transform: rotateY(0deg);
-  opacity: 1;
-  z-index: 3;
   box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
@@ -326,8 +327,7 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
   .issue-grid { grid-template-columns: 1fr; gap: 32px; }
   .issue-name { font-size: 28px; }
   
-  .issue-card:hover .issue-img.front { transform: none; opacity: 1; }
-  .issue-card:hover .issue-img.back { transform: none; opacity: 0; }
+  .issue-card:hover .issue-inner { transform: none; }
 }
 </style>
 </head>
@@ -491,8 +491,10 @@ function openIssues(key, fallbackTitle){
       a.href = iss.link;
       a.innerHTML = `
         <div class="issue-cover-wrap">
-          <img src="${iss.coverFront}" class="issue-img front" alt="Обложка">
-          <img src="${iss.coverBack}" class="issue-img back" alt="Задняя обложка">
+          <div class="issue-inner">
+            <img src="${iss.coverFront}" class="issue-img front" alt="Обложка">
+            <img src="${iss.coverBack}" class="issue-img back" alt="Задняя обложка">
+          </div>
         </div>
         <div class="issue-info">
           <span class="issue-num">№${iss.num}</span>
