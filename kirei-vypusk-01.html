@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КИРЭЙ · Выпуск #01 · Ваби-саби</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#e8e4dc;
+  --paper-light:#f0ece4;
+  --ink:#1a1917;
+  --muted:#6b665e;
+  --line:#c4bfb5;
+  --accent:#c8553d;
+  --dark:#141311;
+  --red:#b3392e;
+  --serif:'Cormorant',serif;
+  --body-serif:'Source Serif 4',serif;
+  --sans:'Inter',sans-serif;
+  --grotesk:'Space Grotesk',sans-serif;
+  --jp:'Noto Serif JP',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--paper)}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-weight:400;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent);color:var(--paper)}
+
+.progress{
+  position:fixed;top:0;left:0;height:2px;background:var(--accent);
+  z-index:1000;width:0;transition:width .1s linear;
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 48px;
+  mix-blend-mode:difference;
+  color:#fff;
+  transition:opacity .4s;
+}
+nav.hidden{opacity:0;pointer-events:none}
+nav .logo{
+  font-family:var(--grotesk);
+  font-size:14px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;text-decoration:none;color:inherit;
+}
+nav ul{display:flex;gap:32px;list-style:none}
+nav a{
+  font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;color:inherit;opacity:.7;transition:opacity .3s;
+}
+nav a:hover{opacity:1}
+
+.entry-screen{
+  position:fixed;inset:0;z-index:500;
+  background-color:var(--paper-light);
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  display:flex;align-items:center;justify-content:center;
+  transition:transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1.2s ease-in-out;
+  cursor:pointer;
+}
+.entry-screen.opened{
+  transform:translateY(-100%);
+  opacity:0;
+  pointer-events:none;
+}
+.entry-inner{
+  max-width:800px;width:100%;padding:0 48px;
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;
+}
+.entry-left{max-width:400px;}
+.entry-toptext{
+  font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:24px;
+}
+.entry-title{
+  font-family:var(--serif);font-weight:300;font-size:clamp(60px,10vw,120px);
+  line-height:.9;letter-spacing:-.03em;margin-bottom:32px;
+}
+.entry-subtitle{
+  font-family:var(--body-serif);font-size:18px;line-height:1.5;color:var(--muted);
+  max-width:280px;
+}
+.entry-hint{
+  margin-top:40px;
+  font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:12px;
+}
+.entry-hint::after{
+  content:'';display:block;width:40px;height:1px;background:var(--accent);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{transform:scaleX(1);transform-origin:left}50%{transform:scaleX(1.5);transform-origin:left}}
+.entry-right{
+  position:relative;
+  width:300px;height:400px;
+  display:flex;flex-direction:column;align-items:flex-end;
+}
+.red-circle{
+  width:200px;height:200px;background:var(--red);border-radius:50%;
+  position:absolute;top:40px;right:40px;
+  opacity:.85;
+  background-image:radial-gradient(circle at 40% 40%,#c4493c 0%,#8a241b 100%);
+  box-shadow:inset 0 0 20px rgba(0,0,0,.2);
+  animation:breathe 6s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.entry-kanji{
+  writing-mode:vertical-rl;
+  font-family:var(--jp);font-size:24px;letter-spacing:.2em;
+  position:absolute;right:0;top:240px;color:var(--ink);
+}
+.entry-info{
+  position:absolute;bottom:-80px;right:0;
+  font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);text-align:right;line-height:1.7;
+}
+
+.main-site{
+  opacity:0;
+  transition:opacity 1.5s ease-in-out 0.5s;
+}
+.main-site.visible{
+  opacity:1;
+}
+
+.forzats-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);padding:48px;
+}
+.forzats-screen p{
+  font-family:var(--serif);font-size:clamp(24px,3vw,36px);font-weight:300;
+  color:var(--ink);text-align:center;line-height:1.4;max-width:600px;
+  font-style:italic;
+}
+
+.issue-head{
+  max-width:1100px;margin:0 auto;padding:80px 48px 40px;
+  border-bottom:1px solid var(--line);margin-bottom:80px;
+}
+.issue-head .ih-label{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:24px;
+}
+.issue-head h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(56px,10vw,140px);line-height:.85;letter-spacing:-.02em;
+  margin-bottom:24px;
+}
+.issue-head .ih-sub{
+  font-size:14px;color:var(--muted);max-width:500px;line-height:1.7;
+}
+
+.spread{
+  max-width:1100px;margin:0 auto 120px;padding:0 48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+  align-items:start;
+}
+.spread.full{grid-template-columns:1fr}
+.spread .col-text h3{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:20px;
+}
+.spread .col-text h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(28px,3.5vw,44px);line-height:1.1;margin-bottom:24px;
+  letter-spacing:-.01em;
+}
+.spread .col-text p{
+  font-family:var(--body-serif);font-size:17px;line-height:1.75;
+  color:#2b2926;margin-bottom:18px;
+}
+.spread .col-text p:first-of-type::first-letter{
+  font-family:var(--serif);font-size:3.4em;float:left;
+  line-height:.8;padding-right:.06em;margin-top:.06em;
+}
+
+.img-block{
+  width:100%;aspect-ratio:4/5;background:#d4cfc5;
+  position:relative;overflow:hidden;
+  background-size:cover;background-position:center;
+}
+.img-block::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 40%,rgba(0,0,0,.04));
+  pointer-events:none;
+}
+.img-block .caption{
+  position:absolute;bottom:16px;left:16px;
+  font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);background:var(--paper);padding:4px 8px;z-index:2;
+}
+.img-block.dark{background:#2a2825}
+.img-block.warm{background:#c9b8a0}
+.img-block.cool{background:#b8bec4}
+.img-block.grain{
+  background-image:radial-gradient(circle at 30% 40%,#d8d2c6 0%,#b5aea1 100%);
+}
+.img-block.grain::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+
+.pull-quote{
+  max-width:1100px;margin:0 auto 120px;padding:80px 48px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.pull-quote p{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(28px,5vw,56px);line-height:1.15;letter-spacing:-.01em;
+  max-width:800px;
+}
+.pull-quote .pq-attrib{
+  font-family:var(--sans);font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-top:24px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.pull-quote .pq-author{
+  font-weight:600;color:var(--ink);
+}
+
+.triptych{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);
+}
+.triptych .img-block{aspect-ratio:1/1}
+
+.dark-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--dark);color:var(--paper);padding:64px 48px;
+}
+.dark-screen .col-text h2{color:var(--paper)}
+.dark-screen .col-text p{color:#b5aea1}
+.dark-screen .col-text h3{color:#8a857c}
+
+.final-screen{
+  min-height:80vh;display:flex;align-items:center;justify-content:center;
+  background-color:var(--dark);color:var(--paper);padding:80px 48px;
+}
+.final-inner{
+  max-width:800px;width:100%;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  flex-wrap:wrap;gap:40px;
+}
+.final-left{max-width:400px;}
+.final-left .fl-label{
+  font-family:var(--sans);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:#8a857c;margin-bottom:24px;
+}
+.final-left p{
+  font-family:var(--body-serif);font-size:16px;line-height:1.8;color:#b5aea1;margin-bottom:24px;
+}
+.final-left .jp-text{
+  font-family:var(--jp);font-size:20px;line-height:1.8;color:#b5aea1;letter-spacing:.1em;margin-bottom:24px;
+}
+.final-left .jp-sub{
+  font-family:var(--body-serif);font-size:15px;line-height:1.6;color:#8a857c;
+}
+.final-right{text-align:right;min-width:200px;}
+.final-right .kanji-big{
+  font-family:var(--jp);font-size:48px;color:var(--paper);margin-bottom:24px;line-height:1.2;
+}
+.final-right .meta{
+  font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a857c;line-height:2;
+}
+.final-right .meta span{color:var(--paper);}
+.final-bottom{
+  max-width:800px;width:100%;margin-top:80px;padding-top:24px;
+  border-top:1px solid #2a2825;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6b665e;
+}
+
+.to-top{
+  position:fixed;bottom:32px;right:32px;z-index:150;
+  width:48px;height:48px;
+  background:var(--paper);border:1px solid var(--line);
+  color:var(--ink);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;text-decoration:none;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s, background .3s, color .3s;
+  mix-blend-mode:difference;
+  color:#fff;
+  border-color:#fff;
+}
+.to-top.visible{opacity:1;pointer-events:auto;}
+.to-top:hover{background:#fff;color:#000;}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  nav{padding:18px 24px}
+  nav ul{gap:20px}
+  .entry-inner{flex-direction:column;align-items:flex-start;gap:60px;padding:0 24px;}
+  .entry-right{width:100%;height:300px;align-items:center}
+  .red-circle{width:150px;height:150px;position:static;margin-bottom:20px}
+  .entry-kanji{position:static;writing-mode:horizontal-tb;letter-spacing:.1em}
+  .entry-info{position:static;text-align:left;margin-top:40px}
+  .issue-head{padding:60px 24px 32px;margin-bottom:60px;}
+  .spread{grid-template-columns:1fr;gap:40px;margin-bottom:80px;padding:0 24px}
+  .triptych{grid-template-columns:1fr}
+  .pull-quote{padding:48px 24px;margin-bottom:80px}
+  .dark-screen, .final-screen{padding:60px 24px}
+  .final-inner{flex-direction:column}
+  .final-right{text-align:left;}
+  .final-bottom{flex-direction:column;align-items:flex-start;gap:16px}
+  .to-top{bottom:24px;right:24px;width:40px;height:40px;}
+}
+</style>
+</head>
+<body>
+
+<a href="#" class="to-top" id="to-top" title="Наверх">↑</a>
+
+<div class="entry-screen" id="entry-screen" onclick="openMagazine()">
+  <div class="entry-inner">
+    <div class="entry-left">
+      <div class="entry-toptext">Журнал о культуре Японии</div>
+      <h1 class="entry-title">КИРЭЙ</h1>
+      <p class="entry-subtitle">Красота несовершенства. Путешествие в сердце японской эстетики.</p>
+      <div class="entry-hint">Нажмите, чтобы открыть</div>
+    </div>
+    <div class="entry-right">
+      <div class="red-circle"></div>
+      <div class="entry-kanji">綺麗</div>
+      <div class="entry-info">
+        №1<br>
+        2 октября 2026<br>
+        Ваби-саби
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main-site" id="main-site">
+  <div class="progress" id="progress"></div>
+
+  <nav>
+    <a href="index.html" class="logo">← На главную</a>
+    <ul>
+      <li><a href="#issue-start">Читать</a></li>
+      <li><a href="#final">Выходные данные</a></li>
+    </ul>
+  </nav>
+
+  <div class="forzats-screen reveal">
+    <p>«Ваби-саби — это не стиль. Это способ смотреть на мир».</p>
+  </div>
+
+  <div id="issue-start" class="issue-head reveal">
+    <div class="ih-label">Кирэй · Выпуск #01 · 2 октября 2026</div>
+    <h1>Ваби-саби</h1>
+    <p class="ih-sub">О красоте, которая не требует завершённости. Чайная церемония, кинцуги, старая керамика и современная японская культура.</p>
+  </div>
+
+  <div class="spread reveal">
+    <div class="col-text">
+      <h3>Эссе</h3>
+      <h2>Красота трещины</h2>
+      <p>В японской культуре вещь не обязана быть новой, чтобы быть ценной. Скол на чаше, потёртость на дереве, след времени — всё это становится частью истории предмета, а не дефектом.</p>
+      <p>Кинцуги — искусство реставрации керамики золотом — превращает повреждение в видимый шрам, который не скрывают, а подчёркивают. Это не просто техника. Это отношение к несовершенству как к источнику смысла.</p>
+      <p>Кирэй означает и «красивый», и «чистый» одновременно. В этом слове нет разделения между эстетикой и этикой — красота здесь неотделима от ясности.</p>
+    </div>
+    <div class="img-block" style="background-image:url('img/wabi-ceramic.jpeg');"><span class="caption">Керамика, XIV век</span></div>
+  </div>
+
+  <div class="spread reveal">
+    <div class="img-block" style="background-image:url('img/wabi-kintsugi.jpg');"><span class="caption">Кинцуги</span></div>
+    <div class="col-text">
+      <h3>Практика</h3>
+      <h2>Золото в шве</h2>
+      <p>Мастер не пытается вернуть вещи первоначальный вид. Он принимает разлом и делает его частью нового целого. Золото здесь — не украшение, а честный след ремонта.</p>
+      <p>В современной Японии кинцуги вышло за пределы ремесла и стало языком дизайна, архитектуры и даже психотерапии. Идея проста: то, что было сломано, может стать лучше, а не хуже.</p>
+    </div>
+  </div>
+
+  <div class="pull-quote reveal">
+    <p>«Вещь становится прекрасной, когда в ней видно время».</p>
+    <div class="pq-attrib">
+      <span class="pq-author">Леонард Корен</span>
+      <span>Японский мастер и философ</span>
+    </div>
+  </div>
+
+  <div class="spread full reveal">
+    <div class="triptych">
+      <div class="img-block" style="background-image:url('img/wabi-chasha.jpeg');"><span class="caption">Чаша</span></div>
+      <div class="img-block" style="background-image:url('img/wabi-tkan.jpeg');"><span class="caption">Ткань</span></div>
+      <div class="img-block" style="background-image:url('img/wabi-kamen.jpeg');"><span class="caption">Камень</span></div>
+    </div>
+  </div>
+
+  <div class="spread reveal">
+    <div class="col-text">
+      <h3>Пять вещей</h3>
+      <h2>Предметы</h2>
+      <p>Старый нож с потёртой рукоятью. Блокнот с загнутыми углами. Камень с берега. Льняная ткань, потерявшая форму. Чашка, которую держали тысячи раз.</p>
+      <p>Каждый из этих предметов несёт след использования. Именно он делает вещь индивидуальной — и именно его невозможно подделать.</p>
+    </div>
+    <div class="img-block" style="background-image:url('img/wabi-objects.jpeg');"><span class="caption">Натюрморт</span></div>
+  </div>
+
+  <div class="dark-screen reveal">
+    <div style="max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+      <div class="col-text">
+        <h3>Ритуал</h3>
+        <h2>Чайная церемония</h2>
+        <p>Чайная комната — это пространство, где нет ничего лишнего. Свет падает из одного окна, стены не украшены, а инструменты просты. В этом минимализме рождается ощущение тишины и полноты.</p>
+        <p>Ваби-саби здесь проявляется в каждой детали: в грубой керамике чаши, в неровной поверхности дерева, в скрипе татами. Идеальное несовершенство становится главным гостем.</p>
+      </div>
+      <div class="img-block" style="aspect-ratio:3/4;background-image:url('img/wabi-tea-room.jpe');"><span class="caption">Чайная комната</span></div>
+    </div>
+  </div>
+
+  <div class="spread reveal" style="margin-top:120px;">
+    <div class="col-text">
+      <h3>Сад</h3>
+      <h2>Гармония и созерцание</h2>
+      <p>Японский сад — это не просто место для прогулок. Это композиция, где каждый элемент имеет значение. Камни, мох, мостик — всё подчинено ритму и пустоте.</p>
+      <p>Садовники намеренно оставляют листья на дорожках, не подстригают ветви идеально ровно. Природа входит в дизайн, и в этом — высшая форма ваби-саби.</p>
+    </div>
+    <div class="img-block" style="aspect-ratio:4/5;background-image:url('img/wabi-garden.jpeg');"><span class="caption">Сад, Киото</span></div>
+  </div>
+
+  <div class="spread reveal">
+    <div class="img-block" style="aspect-ratio:1/1;background-image:url('img/wabi-ikebana.jpeg');"><span class="caption">Икебана</span></div>
+    <div class="col-text">
+      <h3>Искусство</h3>
+      <h2>Икебана: диалог с природой</h2>
+      <p>Икебана — это не просто аранжировка цветов. Это способ увидеть красоту в асимметрии и пустоте. Ветка, изогнутая временем, становится главным героем композиции.</p>
+      <p>Вглядываясь в икебану, мы учимся замечать то, что обычно пропускаем: несовершенство линий, случайность форм, тихую гармонию.</p>
+    </div>
+  </div>
+
+  <div id="final" class="final-screen reveal">
+    <div class="final-inner">
+      <div class="final-left">
+        <div class="fl-label">О журнале</div>
+        <p>«Кирэй» — независимое издание, посвященное японской культуре. Журнал исследует традиции, эстетику и повседневную красоту Японии, рассказывая о философии, искусстве и людях, сохраняющих гармонию между прошлым и настоящим.</p>
+        <div class="jp-text">美しさは<br>不完全さの中に<br>宿る。</div>
+        <p class="jp-sub">Истинная красота скрыта в несовершенстве.</p>
+      </div>
+      
+      <div class="final-right">
+        <div class="kanji-big">侘寂</div>
+        <div class="meta">
+          Главный редактор<br>
+          <span>Сара-Лиза</span><br><br>
+          Связь с редакцией<br>
+          <span>li3233352@gmail.com</span><br><br>
+          Санкт-Петербург<br>
+          2 октября 2026
+        </div>
+      </div>
+      
+      <div class="final-bottom">
+        <div>Кирэй · Выпуск #01</div>
+        <div>Ваби-саби</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openMagazine(){
+  document.getElementById('entry-screen').classList.add('opened');
+  
+  // Жестко фиксируем страницу на самом верху
+  window.scrollTo(0, 0);
+  document.body.style.overflow = 'hidden';
+  
+  setTimeout(()=>{
+    document.body.style.overflow = 'auto';
+    document.getElementById('main-site').classList.add('visible');
+    
+    // Еще раз сбрасываем скролл наверх, чтобы точно не улететь вниз
+    window.scrollTo(0, 0);
+    
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach((el, i) => {
+      setTimeout(() => {
+        el.classList.add('visible');
+      }, i * 100);
+    });
+  }, 1200);
+}
+
+window.addEventListener('scroll',()=>{
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = document.getElementById('progress');
+  const toTop = document.getElementById('to-top');
+  
+  if(h > 0){
+    progress.style.width = (window.scrollY / h * 100) + '%';
+  }
+  
+  if(window.scrollY > 500){
+    toTop.classList.add('visible');
+  } else {
+    toTop.classList.remove('visible');
+  }
+});
+
+document.getElementById('to-top').addEventListener('click', (e)=>{
+  e.preventDefault();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if(target){
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>

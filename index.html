@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ИЗДАНИЯ · Независимые журналы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#e8e4dc;
+  --paper-light:#f0ece4;
+  --ink:#1a1917;
+  --muted:#6b665e;
+  --line:#c4bfb5;
+  --accent:#c8553d;
+  --dark:#141311;
+  --serif:'Cormorant',serif;
+  --body-serif:'Source Serif 4',serif;
+  --sans:'Inter',sans-serif;
+  --grotesk:'Space Grotesk',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--paper)}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-weight:400;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent);color:var(--paper)}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+.reveal.visible{opacity:1;transform:none}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 48px;
+  mix-blend-mode:difference;
+  color:#fff;
+  transition:opacity .4s;
+}
+nav.hidden{opacity:0;pointer-events:none}
+nav .logo{
+  font-family:var(--grotesk);
+  font-size:14px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;text-decoration:none;color:inherit;
+}
+nav ul{display:flex;gap:32px;list-style:none}
+nav a{
+  font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;color:inherit;opacity:.7;transition:opacity .3s;
+}
+nav a:hover{opacity:1}
+
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 48px 64px;position:relative;
+}
+.hero-top{
+  position:absolute;top:120px;left:48px;right:48px;
+  display:flex;justify-content:space-between;align-items:flex-start;
+}
+.hero-meta{
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);max-width:200px;line-height:1.7;
+}
+.hero-title{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(80px,16vw,260px);
+  line-height:.85;
+  letter-spacing:-.02em;
+  margin-bottom:24px;
+}
+.hero-title .thin{
+  font-family:var(--grotesk);
+  font-weight:400;
+  font-size:clamp(28px,4.5vw,64px);
+  letter-spacing:-.03em;
+  display:block;
+  margin-bottom:8px;
+  color:var(--muted);
+}
+.hero-desc{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  border-top:1px solid var(--line);padding-top:20px;margin-top:16px;
+}
+.hero-desc p{max-width:420px;font-size:14px;color:var(--muted);line-height:1.7}
+.hero-desc .scroll-hint{
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);writing-mode:vertical-rl;height:60px;
+}
+
+.section-label{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:0 48px;margin-bottom:40px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.section-label span:last-child{font-family:var(--grotesk);font-weight:500}
+.journals{padding:120px 0 80px}
+.journal-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.journal-card{
+  background:var(--paper);padding:48px 40px 56px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-height:520px;cursor:pointer;position:relative;overflow:hidden;
+  transition:background .5s cubic-bezier(.2,.6,.2,1);
+}
+.journal-card:hover{background:var(--dark);color:var(--paper)}
+.journal-card:hover .jc-meta,.journal-card:hover .jc-desc{color:#8a857c}
+.journal-card:hover .jc-arrow{transform:translate(6px,-6px);color:var(--paper)}
+.jc-num{
+  font-family:var(--grotesk);font-size:12px;
+  letter-spacing:.1em;color:var(--muted);margin-bottom:24px;
+}
+.jc-name{
+  font-size:clamp(32px,4vw,56px);line-height:.95;letter-spacing:-.02em;
+  margin-bottom:16px;
+}
+.journal-card:nth-child(1) .jc-name{font-family:var(--serif);font-weight:400}
+.journal-card:nth-child(2) .jc-name{font-family:var(--grotesk);font-weight:500}
+.journal-card:nth-child(3) .jc-name{font-family:var(--sans);font-weight:300;letter-spacing:-.04em}
+.jc-desc{font-size:13px;color:var(--muted);line-height:1.7;max-width:280px;transition:color .5s}
+.jc-meta{
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-top:32px;transition:color .5s;
+}
+.jc-arrow{
+  position:absolute;bottom:48px;right:40px;font-size:24px;
+  color:var(--ink);transition:transform .5s cubic-bezier(.2,.6,.2,1),color .3s;
+  font-family:var(--grotesk);
+}
+
+.issues-screen{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:var(--paper);overflow-y:auto;
+}
+.issues-screen.open{display:block}
+.issues-inner{
+  max-width:1100px;margin:0 auto;padding:120px 48px 80px;
+}
+.back-btn{
+  font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  background:none;border:none;cursor:pointer;color:var(--muted);
+  display:flex;align-items:center;gap:8px;margin-bottom:60px;
+  transition:color .3s;
+}
+.back-btn:hover{color:var(--ink)}
+.issues-title{
+  font-family:var(--serif);font-weight:300;font-size:clamp(48px,8vw,96px);
+  line-height:.9;letter-spacing:-.02em;margin-bottom:16px;
+}
+.issues-sub{
+  font-family:var(--body-serif);font-size:16px;color:var(--muted);
+  max-width:500px;line-height:1.7;margin-bottom:80px;
+}
+.issue-list{
+  display:flex;flex-direction:column;border-top:1px solid var(--line);
+}
+.issue-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:32px 0;border-bottom:1px solid var(--line);
+  text-decoration:none;color:inherit;transition:padding .3s;
+}
+.issue-item:hover{padding-left:16px;}
+.issue-item-left{display:flex;align-items:baseline;gap:24px}
+.issue-num{
+  font-family:var(--grotesk);font-size:12px;color:var(--muted);
+  letter-spacing:.1em;min-width:40px;
+}
+.issue-name{
+  font-family:var(--serif);font-size:clamp(24px,3vw,36px);font-weight:400;
+  letter-spacing:-.01em;
+}
+.issue-date{
+  font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);
+}
+.issue-arrow{font-size:20px;color:var(--muted);transition:transform .3s}
+.issue-item:hover .issue-arrow{transform:translateX(8px);color:var(--ink)}
+
+.about{padding:120px 48px;border-top:1px solid var(--line)}
+.about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:80px;max-width:1200px}
+.about h2{
+  font-family:var(--serif);font-weight:300;font-size:clamp(36px,5vw,64px);
+  line-height:1;letter-spacing:-.02em;
+}
+.about-right p{
+  font-family:var(--body-serif);font-size:17px;line-height:1.8;
+  color:#2b2926;margin-bottom:20px;max-width:560px;
+}
+.about-right .small{
+  font-family:var(--sans);font-size:12px;line-height:1.8;
+  color:var(--muted);letter-spacing:.02em;
+}
+
+footer{
+  border-top:1px solid var(--line);padding:48px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  flex-wrap:wrap;gap:24px;
+}
+footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-size:14px}
+
+@media(max-width:900px){
+  nav{padding:18px 24px}
+  nav ul{gap:20px}
+  .hero{padding:0 24px 48px}
+  .hero-top{left:24px;right:24px;top:100px}
+  .hero-title{font-size:clamp(60px,18vw,140px)}
+  .hero-desc{flex-direction:column;align-items:flex-start;gap:20px}
+  .hero-desc .scroll-hint{display:none}
+  .section-label{padding:0 24px}
+  .journal-grid{grid-template-columns:1fr}
+  .journal-card{min-height:360px;padding:32px 24px}
+  .jc-arrow{bottom:32px;right:24px}
+  .about{padding:80px 24px}
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  footer{padding:32px 24px}
+  .issues-inner{padding:100px 24px 60px}
+  .issue-item-left{flex-direction:column;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#" class="logo">Издания</a>
+  <ul>
+    <li><a href="#" class="active">Журналы</a></li>
+    <li><a href="#about">О проекте</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-top">
+    <div class="hero-meta reveal">Три издания.<br>Одна платформа.<br>2026</div>
+    <div class="hero-meta reveal" style="text-align:right">Независимые<br>печатные выпуски<br>в цифре</div>
+  </div>
+  <h1 class="hero-title reveal">
+    <span class="thin">издания</span>
+    Архив
+  </h1>
+  <div class="hero-desc reveal">
+    <p>Кирэй, Слой и Контур — три разных взгляда на культуру, архитектуру и искусство. Каждый выпуск читается как цельный журнал.</p>
+    <div class="scroll-hint">листайте</div>
+  </div>
+</header>
+
+<section class="journals">
+  <div class="section-label reveal">
+    <span>Журналы</span>
+    <span>03 издания</span>
+  </div>
+  <div class="journal-grid">
+    <article class="journal-card reveal" onclick="openIssues('kirei', 'Кирэй')">
+      <div>
+        <div class="jc-num">01 / Кирэй</div>
+        <h2 class="jc-name">Кирэй</h2>
+        <p class="jc-desc">Журнал о японской культуре — от традиций и философии до современной керамики и дизайна.</p>
+      </div>
+      <div>
+        <div class="jc-meta">Японская культура</div>
+        <span class="jc-arrow">↗</span>
+      </div>
+    </article>
+    <article class="journal-card reveal" onclick="openIssues('sloy', 'Слой')">
+      <div>
+        <div class="jc-num">02 / Слой</div>
+        <h2 class="jc-name">Слой</h2>
+        <p class="jc-desc">Архитектура и городская среда. Бетон, свет, пространство и то, как здания формируют нашу жизнь.</p>
+      </div>
+      <div>
+        <div class="jc-meta">Архитектура</div>
+        <span class="jc-arrow">↗</span>
+      </div>
+    </article>
+    <article class="journal-card reveal" onclick="openIssues('kontur', 'Контур')">
+      <div>
+        <div class="jc-num">03 / Контур</div>
+        <h2 class="jc-name">Контур</h2>
+        <p class="jc-desc">Современное искусство и его границы. Интервью, критические тексты, цифровые среды и новые медиа.</p>
+      </div>
+      <div>
+        <div class="jc-meta">Современное искусство</div>
+        <span class="jc-arrow">↗</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-grid">
+    <h2 class="reveal">О<br>проекте</h2>
+    <div class="about-right reveal">
+      <p>Издания — это платформа для трёх независимых журналов. Каждый выпуск существует как цельный объект: его не делят на статьи, он читается сверху вниз, как напечатанный журнал.</p>
+      <p>Мы не публикуем новости. Мы делаем редкие, продуманные выпуски, к которым хочется возвращаться.</p>
+      <p class="small">Редактор и автор: Сара-Лиза<br>Санкт-Петербург — 2026<br>li3233352@gmail.com</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">Издания</div>
+  <div>Санкт-Петербург — 2026</div>
+  <div>li3233352@gmail.com</div>
+</footer>
+
+<div class="issues-screen" id="issues-screen">
+  <div class="issues-inner">
+    <button class="back-btn" onclick="closeIssues()">← Назад к журналам</button>
+    <h1 class="issues-title" id="issues-title">Кирэй</h1>
+    <p class="issues-sub" id="issues-sub">Выберите выпуск для чтения.</p>
+    <div class="issue-list" id="issue-list"></div>
+  </div>
+</div>
+
+<script>
+const journalsData = {
+  kirei: {
+    title: 'Кирэй',
+    sub: 'Журнал о культуре Японии. Традиции, философия, эстетика и современная жизнь.',
+    issues: [
+      { num: '01', name: 'Ваби-саби', date: '2 октября 2026', link: 'kirei-vypusk-01.html' }
+    ]
+  },
+  sloy: {
+    title: 'Слой',
+    sub: 'Журнал об архитектуре и городской среде. Бетон, пространство и время.',
+    issues: []
+  },
+  kontur: {
+    title: 'Контур',
+    sub: 'Журнал о современном искусстве. Цифровые среды, новые медиа и критика.',
+    issues: []
+  }
+};
+
+const nav = document.getElementById('nav');
+let lastY = 0;
+window.addEventListener('scroll',()=>{
+  const y = window.scrollY;
+  if(y > lastY && y > 200){nav.classList.add('hidden')}
+  else{nav.classList.remove('hidden')}
+  lastY = y;
+});
+
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}
+  });
+},{threshold:.12});
+revealEls.forEach(el=>io.observe(el));
+
+function openIssues(key, fallbackTitle){
+  const data = journalsData[key];
+  if(!data) return;
+  
+  document.getElementById('issues-title').textContent = data.title || fallbackTitle;
+  document.getElementById('issues-sub').textContent = data.sub || 'Выберите выпуск для чтения.';
+  
+  const list = document.getElementById('issue-list');
+  list.innerHTML = '';
+  
+  if(data.issues.length === 0){
+    const empty = document.createElement('div');
+    empty.style.cssText = 'padding:40px 0;font-family:var(--body-serif);font-size:16px;color:var(--muted);';
+    empty.textContent = 'Выпуски скоро появятся.';
+    list.appendChild(empty);
+  } else {
+    data.issues.forEach(iss => {
+      const a = document.createElement('a');
+      a.className = 'issue-item';
+      a.href = iss.link;
+      a.innerHTML = `
+        <div class="issue-item-left">
+          <span class="issue-num">№${iss.num}</span>
+          <span class="issue-name">${iss.name}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:32px;">
+          <span class="issue-date">${iss.date}</span>
+          <span class="issue-arrow">→</span>
+        </div>
+      `;
+      list.appendChild(a);
+    });
+  }
+  
+  document.getElementById('issues-screen').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeIssues(){
+  document.getElementById('issues-screen').classList.remove('open');
+  document.body.style.overflow = '';
+}
+</script>
+</body>
+</html>
