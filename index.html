@@ -43,7 +43,7 @@ nav{
   padding:22px 48px;
   mix-blend-mode:difference;
   color:#fff;
-  transition:opacity .4s;
+  transition:opacity .4s, padding .3s;
 }
 nav.hidden{opacity:0;pointer-events:none}
 nav .logo{
@@ -210,23 +210,55 @@ footer{
 }
 footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-size:14px}
 
-@media(max-width:900px){
-  nav{padding:18px 24px}
-  nav ul{gap:20px}
-  .hero{padding:0 24px 48px}
-  .hero-top{left:24px;right:24px;top:100px}
-  .hero-title{font-size:clamp(60px,18vw,140px)}
-  .hero-desc{flex-direction:column;align-items:flex-start;gap:20px}
-  .hero-desc .scroll-hint{display:none}
-  .section-label{padding:0 24px}
-  .journal-grid{grid-template-columns:1fr}
-  .journal-card{min-height:360px;padding:32px 24px}
-  .jc-arrow{bottom:32px;right:24px}
-  .about{padding:80px 24px}
-  .about-grid{grid-template-columns:1fr;gap:40px}
-  footer{padding:32px 24px}
-  .issues-inner{padding:100px 24px 60px}
-  .issue-item-left{flex-direction:column;gap:8px}
+/* АДАПТИВНОСТЬ */
+@media(max-width:1024px){
+  .journal-grid{grid-template-columns:1fr 1fr;}
+  .journal-card:last-child{grid-column:span 2; min-height:400px;}
+}
+
+@media(max-width:768px){
+  nav{padding:16px 24px}
+  nav ul{gap:16px}
+  nav a{font-size:11px}
+  
+  .hero{padding:0 24px 40px; justify-content:center;}
+  .hero-top{position:static; margin-bottom:60px; flex-direction:column; gap:16px;}
+  .hero-meta{max-width:100%; text-align:left !important;}
+  .hero-title{font-size:clamp(60px,18vw,120px); line-height:1; margin-bottom:16px;}
+  .hero-title .thin{font-size:clamp(24px,6vw,48px);}
+  .hero-desc{flex-direction:column; align-items:flex-start; gap:20px;}
+  .hero-desc p{font-size:13px;}
+  .hero-desc .scroll-hint{display:none;}
+  
+  .section-label{padding:0 24px; margin-bottom:24px;}
+  
+  .journals{padding:80px 0 40px;}
+  .journal-grid{grid-template-columns:1fr; border-bottom:none;}
+  .journal-card{min-height:auto; padding:40px 24px; border-bottom:1px solid var(--line);}
+  .journal-card:last-child{grid-column:span 1; min-height:auto;}
+  .journal-card:hover{padding-left:24px;}
+  .jc-name{font-size:48px;}
+  .jc-desc{max-width:100%; margin-bottom:24px;}
+  .jc-meta{margin-top:0;}
+  .jc-arrow{position:static; margin-top:24px; align-self:flex-end; font-size:32px;}
+  
+  .about{padding:80px 24px;}
+  .about-grid{grid-template-columns:1fr; gap:40px;}
+  .about h2{font-size:48px;}
+  .about-right p{font-size:16px;}
+  
+  footer{padding:32px 24px; flex-direction:column; align-items:flex-start; gap:16px;}
+  
+  .issues-inner{padding:80px 24px 40px;}
+  .back-btn{margin-bottom:40px;}
+  .issues-title{font-size:64px;}
+  .issues-sub{margin-bottom:40px; font-size:15px;}
+  .issue-item{flex-direction:column; align-items:flex-start; gap:16px; padding:24px 0;}
+  .issue-item:hover{padding-left:0;}
+  .issue-item-left{flex-direction:column; gap:8px;}
+  .issue-name{font-size:28px;}
+  .issue-date{align-self:flex-start;}
+  .issue-arrow{display:none;}
 }
 </style>
 </head>
