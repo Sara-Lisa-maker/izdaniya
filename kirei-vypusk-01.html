@@ -62,7 +62,6 @@ nav a{
 }
 nav a:hover{opacity:1}
 
-
 .entry-screen{
   position:fixed;inset:0;z-index:500;
   background-color:var(--paper-light);
@@ -135,7 +134,6 @@ nav a:hover{opacity:1}
 }
 .main-site.visible{opacity:1;}
 
-
 .forzats-screen{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   background:var(--paper);padding:48px;
@@ -145,7 +143,6 @@ nav a:hover{opacity:1}
   color:var(--ink);text-align:center;line-height:1.4;max-width:600px;
   font-style:italic;
 }
-
 
 .issue-head{
   max-width:1100px;margin:0 auto;padding:80px 48px 40px;
@@ -163,7 +160,6 @@ nav a:hover{opacity:1}
 .issue-head .ih-sub{
   font-size:14px;color:var(--muted);max-width:500px;line-height:1.7;
 }
-
 
 .spread{
   max-width:1100px;margin:0 auto 120px;padding:0 48px;
@@ -189,7 +185,6 @@ nav a:hover{opacity:1}
   line-height:.8;padding-right:.06em;margin-top:.06em;
 }
 
-
 .img-block{
   width:100%;aspect-ratio:4/5;background:#d4cfc5;
   position:relative;overflow:hidden;
@@ -206,7 +201,6 @@ nav a:hover{opacity:1}
   color:var(--muted);background:var(--paper);padding:4px 8px;z-index:2;
 }
 
-
 .pull-quote{
   max-width:1100px;margin:0 auto 120px;padding:80px 48px;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -221,15 +215,15 @@ nav a:hover{opacity:1}
   text-transform:uppercase;color:var(--muted);margin-top:24px;
   display:flex;flex-direction:column;gap:4px;
 }
-.pull-quote .pq-author{font-weight:600;color:var(--ink);}
-
+.pull-quote .pq-author{
+  font-weight:600;color:var(--ink);
+}
 
 .triptych{
   display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
   border:1px solid var(--line);
 }
 .triptych .img-block{aspect-ratio:1/1}
-
 
 .dark-screen{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -249,60 +243,42 @@ nav a:hover{opacity:1}
   align-items:center;
 }
 
-
 .final-screen{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background-color:var(--dark);
-  padding:0; 
-  position:relative;
-  overflow:hidden;
+  min-height:80vh;display:flex;align-items:center;justify-content:center;
+  background-color:var(--dark);color:var(--paper);padding:80px 48px;
 }
-.final-bg {
-  position:absolute;
-  inset:0;
-  background-image:url('img/kirei-cover-back.jpg');
-  background-size:cover;
-  background-position:center;
-  opacity:0.9;
-  z-index:1;
+.final-inner{
+  max-width:800px;width:100%;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  flex-wrap:wrap;gap:40px;
 }
-.final-overlay {
-  position:relative;
-  z-index:2;
-  background: rgba(20, 19, 17, 0.85);
-  padding: 60px;
-  max-width: 600px;
-  margin: 24px;
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(4px);
-}
-.final-overlay .fl-label{
+.final-left{max-width:400px;}
+.final-left .fl-label{
   font-family:var(--sans);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
   color:#8a857c;margin-bottom:24px;
 }
-.final-overlay p{
+.final-left p{
   font-family:var(--body-serif);font-size:16px;line-height:1.8;color:#b5aea1;margin-bottom:24px;
 }
-.final-overlay .jp-text{
+.final-left .jp-text{
   font-family:var(--jp);font-size:20px;line-height:1.8;color:#b5aea1;letter-spacing:.1em;margin-bottom:24px;
 }
-.final-overlay .jp-sub{
+.final-left .jp-sub{
   font-family:var(--body-serif);font-size:15px;line-height:1.6;color:#8a857c;
-  margin-bottom:40px;
 }
-.final-overlay .meta{
+.final-right{text-align:right;min-width:200px;}
+.final-right .kanji-big{
+  font-family:var(--jp);font-size:48px;color:var(--paper);margin-bottom:24px;line-height:1.2;
+}
+.final-right .meta{
   font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a857c;line-height:2;
 }
-.final-overlay .meta span{color:var(--paper);}
-.final-overlay .final-bottom{
-  margin-top:40px;padding-top:24px;
-  border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;
+.final-right .meta span{color:var(--paper);}
+.final-bottom{
+  max-width:800px;width:100%;margin-top:80px;padding-top:24px;
+  border-top:1px solid #2a2825;display:flex;justify-content:space-between;align-items:center;
   font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6b665e;
 }
-
 
 .to-top{
   position:fixed;bottom:32px;right:32px;z-index:150;
@@ -323,13 +299,11 @@ nav a:hover{opacity:1}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
 .reveal.visible{opacity:1;transform:none}
 
-
 @media(max-width:900px){
   nav{padding:16px 24px;}
   nav ul{gap:16px;}
   nav a{font-size:11px;}
 
- 
   .entry-inner{flex-direction:column;align-items:flex-start;gap:40px;padding:0 24px;}
   .entry-left{max-width:100%;}
   .entry-title{font-size:clamp(48px, 15vw, 90px); margin-bottom:16px;}
@@ -388,8 +362,11 @@ nav a:hover{opacity:1}
   .pull-quote{padding:48px 24px; margin-bottom:64px;}
   .pull-quote p{font-size:clamp(24px, 6vw, 36px);}
   
-  .final-overlay{padding:32px 24px; margin:16px;}
-  .final-overlay .final-bottom{flex-direction:column; align-items:flex-start; gap:12px;}
+  .final-screen{padding:60px 24px;}
+  .final-inner{flex-direction:column; gap:32px;}
+  .final-right{text-align:left;}
+  .final-right .kanji-big{font-size:36px;}
+  .final-bottom{flex-direction:column; align-items:flex-start; gap:12px; margin-top:40px;}
   
   .to-top{bottom:24px; right:24px; width:40px; height:40px; font-size:14px;}
 }
@@ -495,7 +472,7 @@ nav a:hover{opacity:1}
         <p>Чайная комната — это пространство, где нет ничего лишнего. Свет падает из одного окна, стены не украшены, а инструменты просты. В этом минимализме рождается ощущение тишины и полноты.</p>
         <p>Ваби-саби здесь проявляется в каждой детали: в грубой керамике чаши, в неровной поверхности дерева, в скрипе татами. Идеальное несовершенство становится главным гостем.</p>
       </div>
-      <div class="img-block" style="aspect-ratio:3/4;background-image:url('img/wabi-tea-room.jpg');"><span class="caption">Чайная комната</span></div>
+      <div class="img-block" style="aspect-ratio:3/4;background-image:url('img/wabi-tea-room.jpeg');"><span class="caption">Чайная комната</span></div>
     </div>
   </div>
 
@@ -520,22 +497,26 @@ nav a:hover{opacity:1}
   </div>
 
   <div id="final" class="final-screen reveal">
-    <div class="final-bg"></div>
-    <div class="final-overlay">
-      <div class="fl-label">О журнале</div>
-      <p>«Кирэй» — независимое издание, посвященное японской культуре. Журнал исследует традиции, эстетику и повседневную красоту Японии, рассказывая о философии, искусстве и людях, сохраняющих гармонию между прошлым и настоящим.</p>
-      <div class="jp-text">美しさは<br>不完全さの中に<br>宿る。</div>
-      <p class="jp-sub">Истинная красота скрыта в несовершенстве.</p>
-      
-      <div class="meta">
-        Главный редактор<br>
-        <span>Сара-Лиза</span><br><br>
-        Связь с редакцией<br>
-        <span>li3233352@gmail.com</span><br><br>
-        Санкт-Петербург<br>
-        2 октября 2026
+    <div class="final-inner">
+      <div class="final-left">
+        <div class="fl-label">О журнале</div>
+        <p>«Кирэй» — независимое издание, посвященное японской культуре. Журнал исследует традиции, эстетику и повседневную красоту Японии, рассказывая о философии, искусстве и людях, сохраняющих гармонию между прошлым и настоящим.</p>
+        <div class="jp-text">美しさは<br>不完全さの中に<br>宿る。</div>
+        <p class="jp-sub">Истинная красота скрыта в несовершенстве.</p>
       </div>
-
+      
+      <div class="final-right">
+        <div class="kanji-big">侘寂</div>
+        <div class="meta">
+          Главный редактор<br>
+          <span>Сара-Лиза</span><br><br>
+          Связь с редакцией<br>
+          <span>li3233352@gmail.com</span><br><br>
+          Санкт-Петербург<br>
+          2 октября 2026
+        </div>
+      </div>
+      
       <div class="final-bottom">
         <div>Кирэй · Выпуск #01</div>
         <div>Ваби-саби</div>
@@ -597,5 +578,4 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 </script>
 </body>
 </html>
-
 
