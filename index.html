@@ -176,19 +176,23 @@ nav a:hover{opacity:1}
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  perspective: 1000px; /* Добавляем перспективу для 3D-эффекта */
 }
 .issue-cover {
   width: 100%;
-  aspect-ratio: 3/4;
+  aspect-ratio: 3/4; /* Идеальные пропорции под твою картинку */
   background-color: #d4cfc5;
   background-size: cover;
   background-position: center;
   border: 1px solid var(--line);
-  transition: transform 0.4s cubic-bezier(0.2, 0.6, 0.2, 1), box-shadow 0.4s;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s, filter 0.6s;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 .issue-card:hover .issue-cover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 32px rgba(0,0,0,0.1);
+  /* Возвращаем эффект 3D-поворота и подъема */
+  transform: translateY(-10px) rotateY(-8deg) rotateX(2deg) scale(1.02);
+  box-shadow: -10px 20px 40px rgba(0,0,0,0.15);
 }
 .issue-info {
   margin-top: 16px;
@@ -295,8 +299,13 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
   
   /* Карточки выпусков на телефоне */
   .issue-grid { grid-template-columns: 1fr; gap: 32px; }
-  .issue-cover { aspect-ratio: 4/5; }
   .issue-name { font-size: 28px; }
+  
+  /* Отключаем 3D-наклон на телефонах (там нет наведения мыши) */
+  .issue-card:hover .issue-cover {
+    transform: none;
+    box-shadow: none;
+  }
 }
 </style>
 </head>
