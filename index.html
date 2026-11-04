@@ -6,7 +6,7 @@
 <title>ИЗДАНИЯ · Независимые журналы</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#e8e4dc;
@@ -14,8 +14,8 @@
   --ink:#1a1917;
   --muted:#6b665e;
   --line:#c4bfb5;
-  --accent:#c8553d;
-  --dark:#141311;
+  --accent:#cc0000;
+  --dark:#0f0f0f;
   --serif:'Cormorant',serif;
   --body-serif:'Source Serif 4',serif;
   --sans:'Inter',sans-serif;
@@ -48,12 +48,12 @@ nav{
 nav.hidden{opacity:0;pointer-events:none}
 nav .logo{
   font-family:var(--grotesk);
-  font-size:14px;font-weight:600;letter-spacing:.12em;
+  font-size:14px;font-weight:700;letter-spacing:.12em;
   text-transform:uppercase;text-decoration:none;color:inherit;
 }
 nav ul{display:flex;gap:32px;list-style:none}
 nav a{
-  font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
   text-decoration:none;color:inherit;opacity:.7;transition:opacity .3s;
 }
 nav a:hover{opacity:1}
@@ -105,7 +105,7 @@ nav a:hover{opacity:1}
 .section-label span:last-child{font-family:var(--grotesk);font-weight:500}
 .journals{padding:120px 0 80px}
 .journal-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
   background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
 }
 .journal-card{
@@ -122,12 +122,10 @@ nav a:hover{opacity:1}
   letter-spacing:.1em;color:var(--muted);margin-bottom:24px;
 }
 .jc-name{
-  font-size:clamp(32px,4vw,56px);line-height:.95;letter-spacing:-.02em;
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(32px,3.5vw,48px);line-height:.95;letter-spacing:-.02em;
   margin-bottom:16px;
 }
-.journal-card:nth-child(1) .jc-name{font-family:var(--serif);font-weight:400}
-.journal-card:nth-child(2) .jc-name{font-family:var(--grotesk);font-weight:500}
-.journal-card:nth-child(3) .jc-name{font-family:var(--sans);font-weight:300;letter-spacing:-.04em}
 .jc-desc{font-size:13px;color:var(--muted);line-height:1.7;max-width:280px;transition:color .5s}
 .jc-meta{
   font-size:11px;letter-spacing:.08em;text-transform:uppercase;
@@ -177,37 +175,22 @@ nav a:hover{opacity:1}
 }
 
 .issue-cover-wrap {
-  position: relative;
   width: 100%;
-  aspect-ratio: 3/4;
   margin-bottom: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background-color: #d4cfc5;
 }
 
 .issue-img {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background-color: #d4cfc5;
-  border: 1px solid var(--line);
-}
-
-.issue-img.front {
+  height: auto;
   display: block;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.issue-img.back {
-  display: none;
-}
-
-.issue-card:hover .issue-img.front {
-  display: none;
-}
-
-.issue-card:hover .issue-img.back {
-  display: block;
+.issue-card:hover .issue-img {
+  transform: scale(1.03);
 }
 
 .issue-info {
@@ -267,9 +250,11 @@ footer{
 }
 footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-size:14px}
 
-@media(max-width:1024px){
+@media(max-width:1200px){
   .journal-grid{grid-template-columns:1fr 1fr;}
-  .journal-card:last-child{grid-column:span 2; min-height:400px;}
+}
+
+@media(max-width:1024px){
   .issue-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
 }
 
@@ -313,9 +298,6 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
   
   .issue-grid { grid-template-columns: 1fr; gap: 32px; }
   .issue-name { font-size: 28px; }
-  
-  .issue-card:hover .issue-img.front { display: block; }
-  .issue-card:hover .issue-img.back { display: none; }
 }
 </style>
 </head>
@@ -331,7 +313,7 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
 
 <header class="hero">
   <div class="hero-top">
-    <div class="hero-meta reveal">Три издания.<br>Одна платформа.<br>2026</div>
+    <div class="hero-meta reveal">Издания.<br>Одна платформа.<br>2026</div>
     <div class="hero-meta reveal" style="text-align:right">Независимые<br>печатные выпуски<br>в цифре</div>
   </div>
   <h1 class="hero-title reveal">
@@ -339,7 +321,7 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
     Архив
   </h1>
   <div class="hero-desc reveal">
-    <p>Кирэй, Слой и Контур — три разных взгляда на культуру, архитектуру и искусство. Каждый выпуск читается как цельный журнал.</p>
+    <p>Кирэй, Слой, Контур и MONO — разные взгляды на культуру, архитектуру, искусство и моду. Каждый выпуск читается как цельный журнал.</p>
     <div class="scroll-hint">листайте</div>
   </div>
 </header>
@@ -347,7 +329,7 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
 <section class="journals">
   <div class="section-label reveal">
     <span>Журналы</span>
-    <span>03 издания</span>
+    <span>04 издания</span>
   </div>
   <div class="journal-grid">
     <article class="journal-card reveal" onclick="openIssues('kirei', 'Кирэй')">
@@ -383,6 +365,17 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
         <span class="jc-arrow">↗</span>
       </div>
     </article>
+    <article class="journal-card reveal" onclick="openIssues('mono', 'MONO')">
+      <div>
+        <div class="jc-num">04 / MONO</div>
+        <h2 class="jc-name">MONO</h2>
+        <p class="jc-desc">Журнал о моде. Каждый выпуск посвящен одному цвету, который определяет эстетику сезона.</p>
+      </div>
+      <div>
+        <div class="jc-meta">Мода</div>
+        <span class="jc-arrow">↗</span>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -390,8 +383,8 @@ footer .f-logo{font-family:var(--grotesk);font-weight:600;color:var(--ink);font-
   <div class="about-grid">
     <h2 class="reveal">О<br>проекте</h2>
     <div class="about-right reveal">
-      <p>Издания — это платформа для трёх независимых журналов. Каждый выпуск существует как цельный объект: его не делят на статьи, он читается сверху вниз, как напечатанный журнал.</p>
-      <p>Мы не публикуем новости. Мы делаем редкие, продуманные выпуски, к которым хочется возвращаться.</p>
+      <p>Издания — это платформа для независимых журналов. Каждый выпуск существует как цельный объект: его не делят на статьи, он читается сверху вниз, как напечатанный журнал.</p>
+      <p>Журнал не публикует новости. Он делает редкие, продуманные выпуски, к которым хочется возвращаться.</p>
       <p class="small">Редактор и автор: Сара-Лиза<br>Санкт-Петербург — 2026<br>li3233352@gmail.com</p>
     </div>
   </div>
@@ -422,8 +415,7 @@ const journalsData = {
         num: '01', 
         name: 'Ваби-саби', 
         date: '2 октября 2026', 
-        coverFront: 'img/kirei-cover-front.jpg',
-        coverBack: 'img/kirei-cover-back.jpg',
+        cover: 'img/kirei-cover-front.jpg',
         link: 'kirei-vypusk-01.html' 
       }
     ]
@@ -436,6 +428,19 @@ const journalsData = {
   kontur: {
     title: 'Контур',
     sub: 'Журнал о современном искусстве. Цифровые среды, новые медиа и критика.',
+    issues: [
+      {
+        num: '01',
+        name: 'Шов',
+        date: '4 октября 2026',
+        cover: 'img/Kontur/01/kontur-cover.jpg',
+        link: 'kontur-vypusk-01.html'
+      }
+    ]
+  },
+  mono: {
+    title: 'MONO',
+    sub: 'Журнал о моде.',
     issues: []
   }
 };
@@ -479,8 +484,7 @@ function openIssues(key, fallbackTitle){
       a.href = iss.link;
       a.innerHTML = `
         <div class="issue-cover-wrap">
-          <img src="${iss.coverFront}" class="issue-img front" alt="Обложка">
-          <img src="${iss.coverBack}" class="issue-img back" alt="Задняя обложка">
+          <img src="${iss.cover}" class="issue-img" alt="Обложка">
         </div>
         <div class="issue-info">
           <span class="issue-num">№${iss.num}</span>
