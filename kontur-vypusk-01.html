@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КОНТУР · Выпуск #01 · Шов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ffffff;
+  --paper-light:#f4f4f4;
+  --ink:#0a0a0a;
+  --muted:#7a7a7a;
+  --line:#e0e0e0;
+  --accent:#cc0000;
+  --dark:#0f0f0f;
+  --serif:'Cormorant',serif;
+  --body-serif:'Source Serif 4',serif;
+  --sans:'Inter',sans-serif;
+  --grotesk:'Space Grotesk',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--paper)}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-weight:400;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent);color:var(--paper)}
+
+.progress{
+  position:fixed;top:0;left:0;height:3px;background:var(--accent);
+  z-index:1000;width:0;transition:width .1s linear;
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 48px;
+  mix-blend-mode:difference;
+  color:#fff;
+  transition:opacity .4s, padding .3s;
+}
+nav.hidden{opacity:0;pointer-events:none}
+nav .logo{
+  font-family:var(--grotesk);
+  font-size:14px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;text-decoration:none;color:inherit;
+}
+nav ul{display:flex;gap:32px;list-style:none}
+nav a{
+  font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
+  text-decoration:none;color:inherit;opacity:.7;transition:opacity .3s;
+}
+nav a:hover{opacity:1}
+
+.entry-screen{
+  position:fixed;inset:0;z-index:500;
+  background-color:var(--dark);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1.2s ease-in-out;
+  cursor:pointer;
+  color:var(--paper);
+  overflow:hidden;
+}
+.entry-screen.opened{
+  transform:translateY(-100%);
+  opacity:0;
+  pointer-events:none;
+}
+
+.entry-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.entry-lines div {
+  position: absolute;
+  background: var(--accent);
+  transform-origin: top left;
+}
+.entry-lines div:nth-child(1) {
+  top: 10%; left: -10%; width: 2px; height: 120vh; transform: rotate(-25deg);
+}
+.entry-lines div:nth-child(2) {
+  top: -20%; right: 20%; width: 4px; height: 150vh; transform: rotate(15deg); opacity: 0.6;
+}
+.entry-lines div:nth-child(3) {
+  top: 40%; left: 60%; width: 1px; height: 80vh; transform: rotate(-45deg);
+}
+.entry-lines div:nth-child(4) {
+  bottom: -10%; right: -5%; width: 3px; height: 100vh; transform: rotate(35deg); opacity: 0.8;
+}
+
+.entry-inner{
+  max-width:900px;width:100%;padding:0 48px;
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;
+  z-index:2;
+}
+.entry-left{max-width:500px;}
+.entry-toptext{
+  font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;
+  color:var(--muted);margin-bottom:24px;
+}
+.entry-title{
+  font-family:var(--serif);font-weight:300;font-size:clamp(70px,12vw,160px);
+  line-height:.85;letter-spacing:-.03em;margin-bottom:32px;
+  text-transform:uppercase;
+}
+.entry-subtitle{
+  font-family:var(--body-serif);font-size:18px;line-height:1.5;color:#a0a0a0;
+  max-width:350px;
+}
+.entry-hint{
+  margin-top:40px;
+  font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  color:var(--accent);display:flex;align-items:center;gap:12px;
+}
+.entry-hint::after{
+  content:'';display:block;width:40px;height:1px;background:var(--accent);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{transform:scaleX(1);transform-origin:left}50%{transform:scaleX(1.5);transform-origin:left}}
+
+.entry-info{
+  position:absolute;bottom:-80px;right:0;
+  font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;
+  color:var(--muted);text-align:right;line-height:1.7;
+}
+
+.main-site{
+  opacity:0;
+  transition:opacity 1.5s ease-in-out 0.5s;
+}
+.main-site.visible{opacity:1;}
+
+.forzats-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);padding:48px;
+  position:relative;
+  overflow:hidden;
+}
+.forzats-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.forzats-lines div {
+  position: absolute;
+  background: var(--accent);
+  transform-origin: center;
+}
+.forzats-lines div:nth-child(1) {
+  top: 0; left: 20%; width: 2px; height: 100%; transform: skewX(-15deg);
+}
+.forzats-lines div:nth-child(2) {
+  top: 0; right: 10%; width: 4px; height: 100%; transform: skewX(20deg); opacity: 0.5;
+}
+.forzats-lines div:nth-child(3) {
+  bottom: 10%; left: -10%; width: 100%; height: 2px; transform: rotate(-5deg);
+}
+.forzats-screen p{
+  font-family:var(--sans);font-size:clamp(32px,5vw,64px);font-weight:900;
+  color:var(--ink);text-align:center;line-height:1;
+  max-width:1000px;
+  text-transform:uppercase;letter-spacing:-.05em;
+  position:relative;
+  z-index:2;
+}
+.forzats-screen p span {
+  color: var(--accent);
+}
+
+.issue-head{
+  max-width:1100px;margin:0 auto;padding:120px 48px 40px;
+  border-bottom:2px solid var(--ink);margin-bottom:80px;
+  position:relative;
+}
+.issue-head::after {
+  content: '01';
+  position: absolute;
+  right: 48px;
+  bottom: 40px;
+  font-family: var(--grotesk);
+  font-size: 150px;
+  font-weight: 900;
+  line-height: 0.8;
+  color: var(--accent);
+  opacity: 0.1;
+}
+.issue-head .ih-label{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+  color:var(--accent);margin-bottom:24px;
+}
+.issue-head h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(80px,15vw,200px);line-height:.8;letter-spacing:-.04em;
+  margin-bottom:24px;text-transform:uppercase;
+}
+.issue-head .ih-sub{
+  font-size:18px;color:var(--muted);max-width:600px;line-height:1.6;
+}
+
+.spread{
+  max-width:1100px;margin:0 auto 120px;padding:0 48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+  align-items:start;
+}
+.spread.full{grid-template-columns:1fr}
+.spread .col-text h3{
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  color:var(--accent);margin-bottom:20px;
+}
+.spread .col-text h2{
+  font-family:var(--sans);font-weight:800;
+  font-size:clamp(32px,4vw,56px);line-height:1;margin-bottom:24px;
+  letter-spacing:-.03em;text-transform:uppercase;
+}
+.spread .col-text p{
+  font-family:var(--body-serif);font-size:18px;line-height:1.7;
+  color:#222;margin-bottom:20px;
+}
+.spread .col-text p:first-of-type::first-letter{
+  font-family:var(--sans);font-size:4em;font-weight:900;float:left;
+  line-height:.75;padding-right:.1em;margin-top:.05em;color:var(--accent);
+}
+
+.img-block{
+  width:100%;aspect-ratio:4/5;background:#e0e0e0;
+  position:relative;
+  background-size:cover;background-position:center;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.img-block::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.7s;
+}
+.img-block:hover::after {
+  left: 150%;
+}
+.img-block .caption{
+  position:absolute;bottom:0;left:0;
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--paper);background:var(--ink);padding:12px 16px;z-index:2;
+  font-weight:600;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.img-block:hover .caption {
+  transform: translateY(0);
+}
+
+.pull-quote{
+  max-width:1100px;margin:0 auto 120px;padding:80px 48px;
+  background:var(--accent);color:var(--paper);
+  position:relative;
+  overflow:hidden;
+}
+.pull-quote::before {
+  content: 'ШОВ';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--grotesk);
+  font-size: 300px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--paper);
+  opacity: 0.05;
+  pointer-events: none;
+}
+.pull-quote p{
+  font-family:var(--sans);font-weight:900;
+  font-size:clamp(36px,6vw,80px);line-height:1;letter-spacing:-.04em;
+  max-width:900px;text-transform:uppercase;
+  position:relative;z-index:2;
+}
+.pull-quote .pq-attrib{
+  font-family:var(--sans);font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;margin-top:32px;
+  display:flex;flex-direction:column;gap:4px;
+  font-weight:600;position:relative;z-index:2;
+}
+
+.dark-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--dark);color:var(--paper);padding:80px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.dark-screen::before {
+  content: '';
+  position: absolute;
+  top: -10%; left: 30%; width: 4px; height: 120%;
+  background: var(--accent);
+  transform: rotate(-10deg);
+  opacity: 0.8;
+  z-index: 0;
+}
+.dark-screen::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 10%; width: 2px; height: 100%;
+  background: var(--accent);
+  transform: rotate(15deg);
+  opacity: 0.4;
+  z-index: 0;
+}
+.dark-screen .col-text h2{color:var(--paper); font-family:var(--sans); font-weight:900; letter-spacing:-.04em; font-size: clamp(40px, 6vw, 72px); line-height: 1;}
+.dark-screen .col-text p{color:#b0b0b0; font-family:var(--body-serif); font-size: 18px;}
+.dark-screen .col-text h3{color:var(--accent); font-family:var(--sans); font-weight:700; font-size: 12px; letter-spacing: 0.1em;}
+.dark-screen .col-text p:first-of-type::first-letter{color:var(--accent); font-family:var(--sans); font-weight: 900;}
+
+.dark-screen-inner {
+  max-width:1100px;
+  margin:0 auto;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+  position: relative;
+  z-index: 2;
+}
+.dark-screen .img-block {
+  border-color: #333;
+}
+
+.artist-gallery {
+  max-width:1100px;margin:0 auto 120px;padding:0 48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;
+}
+.artist-gallery .img-block {
+  aspect-ratio: 1/1;
+}
+.artist-gallery .img-block:nth-child(1) {
+  grid-column: span 2;
+  aspect-ratio: 21/9;
+}
+.artist-gallery .img-block:nth-child(2) {
+  transform: translateY(40px);
+}
+
+.interview-screen {
+  max-width:1100px;margin:0 auto 120px;padding:0 48px;
+}
+.interview-screen h2 {
+  font-family:var(--sans);font-weight:900;
+  font-size:clamp(40px,6vw,80px);line-height:1;margin-bottom:60px;
+  letter-spacing:-.04em;text-transform:uppercase;
+  border-bottom: 4px solid var(--accent);
+  padding-bottom: 24px;
+}
+.interview-grid {
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;
+}
+.interview-item {
+  border-left: 2px solid var(--line);
+  padding-left: 24px;
+  position: relative;
+}
+.interview-item::before {
+  content: '';
+  position: absolute;
+  left: -2px; top: 0;
+  width: 2px; height: 20px;
+  background: var(--accent);
+}
+.interview-q {
+  font-family:var(--sans);font-weight:800;font-size:22px;line-height:1.3;
+  margin-bottom:16px;
+  letter-spacing: -0.02em;
+}
+.interview-a {
+  font-family:var(--body-serif);font-size:18px;line-height:1.6;color:#333;
+}
+.interview-a strong {
+  font-family:var(--sans);font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:8px;color:var(--accent);
+}
+
+.exhibition-screen {
+  max-width:1100px;margin:0 auto 120px;padding:0 48px;
+}
+.exh-header {
+  display:flex;justify-content:space-between;align-items:flex-end;
+  border-bottom:4px solid var(--ink);padding-bottom:24px;margin-bottom:48px;
+}
+.exh-header h2 {
+  font-family:var(--sans);font-weight:900;font-size:clamp(40px,6vw,80px);
+  line-height:.9;letter-spacing:-.05em;text-transform:uppercase;
+}
+.city-tabs {
+  display:flex;gap:0;
+}
+.city-btn {
+  background:none;border:2px solid var(--ink);
+  font-family:var(--sans);font-size:14px;
+  font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--ink);cursor:pointer;padding:12px 24px;
+  transition:all .3s;margin-left:-2px;
+}
+.city-btn.active {
+  background:var(--ink);color:var(--paper);
+}
+.city-btn:hover:not(.active) {
+  background:var(--line);
+}
+.exh-list {
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+.exh-item {
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:40px;border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  text-decoration:none;color:inherit;transition:all .4s;
+  background:var(--paper);
+  position:relative;
+}
+.exh-item:hover {
+  background: var(--paper-light);
+}
+.exh-item:hover .exh-title {
+  color: var(--accent);
+}
+.exh-title {
+  font-family:var(--sans);font-weight:900;font-size:32px;margin-bottom:12px;
+  line-height:1;letter-spacing:-.03em;text-transform:uppercase;
+  transition: color 0.3s;
+}
+.exh-desc {
+  font-family:var(--sans);font-size:15px;color:var(--muted);line-height:1.5;margin-bottom:32px;
+}
+.exh-bottom {
+  display:flex;justify-content:space-between;align-items:flex-end;
+  border-top:1px solid var(--line);padding-top:16px;
+}
+.exh-date {
+  font-family:var(--grotesk);font-size:16px;font-weight:700;
+}
+.exh-place {
+  font-family:var(--sans);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink);font-weight:800;text-align:right;
+}
+.exh-link {
+  font-family:var(--sans);font-size:12px;font-weight:800;text-transform:uppercase;color:var(--accent);display:inline-block;margin-top:16px;border-bottom:2px solid var(--accent); width:max-content;
+}
+
+.final-screen{
+  min-height:80vh;display:flex;align-items:center;justify-content:center;
+  background-color:var(--dark);color:var(--paper);padding:80px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.final-screen::after {
+  content: 'КОНТУР';
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 20vw;
+  line-height: 1;
+  color: rgba(255,255,255,0.02);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.final-inner{
+  max-width:800px;width:100%;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  flex-wrap:wrap;gap:40px;
+  position: relative;
+  z-index: 2;
+}
+.final-left{max-width:400px;}
+.final-left .fl-label{
+  font-family:var(--sans);font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;
+  color:var(--accent);margin-bottom:24px;
+}
+.final-left p{
+  font-family:var(--body-serif);font-size:18px;line-height:1.8;color:#b0b0b0;margin-bottom:24px;
+}
+.final-right{text-align:right;min-width:200px;}
+.final-right .meta{
+  font-family:var(--sans);font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:#666;line-height:2;
+}
+.final-right .meta span{color:var(--paper);font-weight:800;}
+.final-bottom{
+  max-width:800px;width:100%;margin-top:80px;padding-top:24px;
+  border-top:1px solid #333;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#666;
+  position: relative;
+  z-index: 2;
+}
+
+.to-top{
+  position:fixed;bottom:32px;right:32px;z-index:150;
+  width:56px;height:56px;
+  background:var(--accent);border:none;
+  color:var(--paper);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;text-decoration:none;font-weight:bold;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s, background .3s, transform .3s;
+}
+.to-top.visible{opacity:1;pointer-events:auto;}
+.to-top:hover{background:var(--ink); transform: translateY(-4px);}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  nav{padding:16px 24px;}
+  nav ul{gap:16px;}
+  nav a{font-size:11px;}
+
+  .entry-inner{flex-direction:column;align-items:flex-start;gap:40px;padding:0 24px;}
+  .entry-left{max-width:100%;}
+  .entry-title{font-size:clamp(60px, 15vw, 100px); margin-bottom:16px;}
+  .entry-subtitle{font-size:16px; max-width:100%;}
+  .entry-info{position:static; text-align:left; margin-top:20px;}
+
+  .forzats-screen{padding:40px 24px;}
+  .forzats-screen p{font-size:28px;}
+
+  .issue-head{padding:80px 24px 32px; margin-bottom:48px;}
+  .issue-head h1{font-size:clamp(60px, 18vw, 100px);}
+  .issue-head .ih-sub{font-size:16px;}
+  .issue-head::after { display: none; }
+
+  .spread{
+    display: flex; 
+    flex-direction: column; 
+    gap: 32px; 
+    margin-bottom: 64px; 
+    padding: 0 24px;
+  }
+  
+  .spread .col-text { order: 1; width: 100%; }
+  .spread .img-block { order: 2; width: 100%; margin-top: 16px; aspect-ratio: 4/5; }
+
+  .spread .col-text h2{font-size:32px;}
+  .spread .col-text p{font-size:16px;}
+  
+  .artist-gallery {
+    padding: 0 24px; gap: 24px; margin-bottom: 64px; grid-template-columns: 1fr;
+  }
+  .artist-gallery .img-block:nth-child(1) { grid-column: span 1; aspect-ratio: 4/5; }
+  .artist-gallery .img-block:nth-child(2) { transform: none; }
+
+  .dark-screen{padding:48px 24px;}
+  .dark-screen-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .dark-screen .col-text { order: 1; width: 100%; }
+  .dark-screen .img-block { order: 2; width: 100%; margin-top: 16px; aspect-ratio: 3/4; }
+  
+  .dark-screen .col-text h2{font-size:32px;}
+  
+  .pull-quote{padding:48px 24px; margin-bottom:64px;}
+  .pull-quote p{font-size:clamp(28px, 8vw, 48px);}
+  .pull-quote::before { font-size: 100px; }
+
+  .interview-screen { padding: 0 24px; margin-bottom: 64px;}
+  .interview-grid { grid-template-columns: 1fr; gap: 32px; }
+  
+  .exhibition-screen { padding: 0 24px; margin-bottom: 64px;}
+  .exh-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .exh-list { grid-template-columns: 1fr; border-left: none; border-top: none;}
+  .exh-item { border-left: 1px solid var(--line); padding: 24px; }
+  
+  .final-screen{padding:60px 24px;}
+  .final-inner{flex-direction:column; gap:32px;}
+  .final-right{text-align:left;}
+  .final-bottom{flex-direction:column; align-items:flex-start; gap:12px; margin-top:40px;}
+  
+  .to-top{bottom:24px; right:24px; width:48px; height:48px; font-size:20px;}
+}
+</style>
+</head>
+<body>
+
+<a href="#" class="to-top" id="to-top" title="Наверх">↑</a>
+
+<div class="entry-screen" id="entry-screen" onclick="openMagazine()">
+  <div class="entry-lines">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="entry-inner">
+    <div class="entry-left">
+      <div class="entry-toptext">Журнал о современном искусстве</div>
+      <h1 class="entry-title">КОНТУР</h1>
+      <p class="entry-subtitle">Искусство, которое разрезает реальность, чтобы показать её устройство.</p>
+      <div class="entry-hint">Нажмите, чтобы открыть</div>
+    </div>
+    <div class="entry-right">
+      <div class="entry-info">
+        №1<br>
+        4 октября 2026<br>
+        Шов
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main-site" id="main-site">
+  <div class="progress" id="progress"></div>
+
+  <nav>
+    <a href="index.html" class="logo">← На главную</a>
+    <ul>
+      <li><a href="#issue-start">Читать</a></li>
+      <li><a href="#exhibitions">Календарь</a></li>
+      <li><a href="#final">Выходные данные</a></li>
+    </ul>
+  </nav>
+
+  <div class="forzats-screen reveal">
+    <div class="forzats-lines">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p>Шов — это место, <span>где заканчивается</span> старое и начинается новое.</p>
+  </div>
+
+  <div id="issue-start" class="issue-head reveal">
+    <div class="ih-label">Контур · Выпуск #01 · 4 октября 2026</div>
+    <h1>Шов</h1>
+    <p class="ih-sub">Физический разлом и соединение материалов как главный язык современного искусства. От деконструкции формы до новых границ человеческого тела.</p>
+  </div>
+
+  <div class="spread reveal">
+    <div class="col-text">
+      <h3>Колонка редактора</h3>
+      <h2>Анатомия разреза</h2>
+      <p>Современное искусство перестало быть гладким. Оно не пытается понравиться идеальной поверхностью. Художники берут материал — холст, металл, плоть — и физически его изменяют. Режут, ломают, а затем сшивают обратно.</p>
+      <p>Журнал «Контур» в первом выпуске исследует этот процесс. Разлом становится методом, а не ошибкой. От работ Анхелы де ла Крус, которая ломает подрамники, до цифровых манипуляций, где реальность разлетается на пиксели.</p>
+      <p>Искусство — это хирургия. Оно режет по живому, чтобы показать то, что скрыто под кожей реальности. Шов — это не конец, это точка сборки.</p>
+    </div>
+    <div class="img-block" style="background-image:url('img/Kontur/01/kontur-essay.jpg');"><span class="caption">Bare (Red), 2017</span></div>
+  </div>
+
+  <div class="pull-quote reveal">
+    <p>«Искусство — это не то, что ты видишь, а то, что ты не можешь забыть».</p>
+    <div class="pq-attrib">
+      <span>Из манифеста выпуска</span>
+    </div>
+  </div>
+
+  <div class="spread reveal">
+    <div class="col-text">
+      <h3>Персона номера</h3>
+      <h2>Анхела де ла Крус</h2>
+      <p>Испанско-британская художница Анхела де ла Крус (Angela de la Cruz) работает с живописью как с физическим объектом. Она снимает холсты с подрамников, комкает их, режет и закрепляет на стенах или полу. Её работы выглядят как тела после травмы.</p>
+      <p>В работе «Loose Fit» (2002) она использует цвет синяка, а сам холст выглядит так, будто с него содрали кожу. Это не просто картины — это скульптуры, которые находятся в состоянии физического дискомфорта. Художница показывает, что живопись может быть агрессивной и уязвимой одновременно.</p>
+    </div>
+    <div class="img-block" style="background-image:url('img/Kontur/01/kontur-artist-01.jpg');"><span class="caption">Loose Fit, 2002</span></div>
+  </div>
+
+  <div class="artist-gallery reveal">
+    <div class="img-block" style="background-image:url('img/Kontur/01/kontur-artist-02.jpg');"><span class="caption">Deflated IV (White), 2009</span></div>
+    <div class="img-block" style="background-image:url('img/Kontur/01/kontur-artist-03.jpg');"><span class="caption">Nothing Under a Chair, 1999</span></div>
+    <div class="img-block" style="background-image:url('img/Kontur/01/kontur-artist-04.jpg');"><span class="caption">Hung 13 (Turquoise/Brown), 2010</span></div>
+  </div>
+
+  <div class="dark-screen reveal">
+    <div class="dark-screen-inner">
+      <div class="col-text">
+        <h3>Деконструкция</h3>
+        <h2>Фотоколлаж как шов</h2>
+        <p>Техника ручной нарезки и склейки фотографий переживает ренессанс. Художники берут аналоговые снимки, разрезают их на части и собирают заново, создавая искаженные портреты и пейзажи.</p>
+        <p>В проекте second_skins автор режет собственные портреты, исследуя тему идентичности. Каждый разрез — это попытка найти новые смыслы в знакомом образе. Шов здесь становится не просто методом, а философией.</p>
+      </div>
+      <div class="img-block" style="aspect-ratio:3/4;background-image:url('img/Kontur/01/kontur-collage.jpg');"><span class="caption">second_skins</span></div>
+    </div>
+  </div>
+
+  <div class="interview-screen reveal">
+    <h2>Границы: Интервью с Liya Ling</h2>
+    <div class="interview-grid">
+      <div class="interview-item">
+        <div class="interview-q">Когда Вы смотрите на современное искусство, которое намеренно ломает форму или образ, что Вы чувствуете в первую очередь: сопротивление или интерес?</div>
+        <div class="interview-a"><strong>Liya Ling</strong>Мне кажется, у меня возникает интерес. Мне нравится, когда привычный образ ломают.</div>
+      </div>
+      <div class="interview-item">
+        <div class="interview-q">В выпуске «Шов» речь идет о художниках, которые физически разрезают материал и собирают его заново. Как Вы думаете, зритель сегодня вообще готов видеть «швы», или ему все еще нужна «гладкая» картинка?</div>
+        <div class="interview-a"><strong>Liya Ling</strong>Швы, трещины — это всё естественно. Это тоже красиво и порой заставляет задуматься.</div>
+      </div>
+      <div class="interview-item">
+        <div class="interview-q">Вы работаете в среде, где эстетика часто важнее содержания. Сталкивались ли Вы с ситуацией, когда приходилось выбирать между «красиво» и «честно»?</div>
+        <div class="interview-a"><strong>Liya Ling</strong>Лично я люблю, чтобы было честно и красиво. Если выбирать, то, наверное, меня больше привлечет что-то красивое, но важнее — честность.</div>
+      </div>
+      <div class="interview-item">
+        <div class="interview-q">Если бы Вам предложили стать частью такого «разрезанного» произведения — согласились бы? Или дистанция важнее?</div>
+        <div class="interview-a"><strong>Liya Ling</strong>Я слишком стесняюсь.</div>
+      </div>
+      <div class="interview-item" style="grid-column: 1 / -1;">
+        <div class="interview-q">Что для Вас является тем самым «швом» — границей, за которую Вы не готовы пускать зрителя в своем творчестве?</div>
+        <div class="interview-a"><strong>Liya Ling</strong>Не люблю выкладывать спидпэинты, так как стесняюсь показывать то, как я рисую. Мне страшно, что напишут: «Ты неправильно рисуешь! У тебя ошибки!». Я и так прекрасно знаю о своих ошибках. Я боюсь получать такую критику.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exhibition-screen reveal" id="exhibitions">
+    <div class="exh-header">
+      <h2>Календарь<br>выставок</h2>
+      <div class="city-tabs">
+        <button class="city-btn active" onclick="filterCity('spb', event)">СПБ</button>
+        <button class="city-btn" onclick="filterCity('msk', event)">МСК</button>
+      </div>
+    </div>
+    <div class="exh-list" id="exh-list">
+    </div>
+  </div>
+
+  <div id="final" class="final-screen reveal">
+    <div class="final-inner">
+      <div class="final-left">
+        <div class="fl-label">О журнале</div>
+        <p>«Контур» — независимое издание о современном искусстве. Журнал исследует границы визуального, новые медиа и физические практики художников. Только факты, имена и анализ.</p>
+      </div>
+      
+      <div class="final-right">
+        <div class="meta">
+          Главный редактор<br>
+          <span>Сара-Лиза</span><br><br>
+          Связь с редакцией<br>
+          <span>li3233352@gmail.com</span><br><br>
+          Санкт-Петербург<br>
+          4 октября 2026
+        </div>
+      </div>
+      
+      <div class="final-bottom">
+        <div>Контур · Выпуск #01</div>
+        <div>Шов</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const exhibitions = {
+  spb: [
+    {
+      title: 'Всплеск',
+      artist: 'Игорь Самолёт',
+      desc: 'Кинетическая инсталляция из стекла, которое разбивается и превращается в осколки.',
+      date: '24 окт — 1 ноя 2026',
+      place: 'Левашовский хлебозавод',
+      link: 'https://hlebozavod.spb.ru/'
+    },
+    {
+      title: 'Пустая сцена',
+      artist: 'Сергей Сапожников',
+      desc: 'Фотография, исследующая пустоту городских ландшафтов.',
+      date: '12 сен — 11 окт 2026',
+      place: 'РОСФОТО / Общество «А-Я»',
+      link: 'https://rosphoto.org/'
+    },
+    {
+      title: 'Траектории интервалов',
+      artist: 'Intervals Exhibition',
+      desc: 'Медиаискусство, инсталляции, работа со светом и пространством.',
+      date: '6 — 18 окт 2026',
+      place: 'Севкабель Порт',
+      link: 'https://sevcableport.ru/'
+    }
+  ],
+  msk: [
+    {
+      title: 'Релапс',
+      artist: 'Михаил Доляновский',
+      desc: 'Живопись, в которой поверхность холста разрывается, а фигуры «выбираются» наружу.',
+      date: '2 сен — 18 окт 2026',
+      place: 'Винзавод, Галерея Ovcharenko',
+      link: 'https://www.winzavod.ru/'
+    },
+    {
+      title: 'Арт-шаффл 42.0',
+      artist: 'Коллективная выставка',
+      desc: 'Коллективная выставка резидентов — «художественная рулетка» без тематических ограничений.',
+      date: '22 сен — 18 окт 2026',
+      place: 'Винзавод, Галерея БИС АРТ',
+      link: 'https://www.winzavod.ru/'
+    },
+    {
+      title: 'След',
+      artist: 'Групповая выставка',
+      desc: 'Выставка о трансформации идентичности и цифровых следах.',
+      date: '23 окт 2026',
+      place: 'VS Gallery',
+      link: 'https://vsgallery.ru/'
+    }
+  ]
+};
+
+function filterCity(city, e) {
+  document.querySelectorAll('.city-btn').forEach(btn => btn.classList.remove('active'));
+  if(e) e.target.classList.add('active');
+  
+  const list = document.getElementById('exh-list');
+  list.innerHTML = '';
+  
+  exhibitions[city].forEach(exh => {
+    const a = document.createElement('a');
+    a.className = 'exh-item';
+    a.href = exh.link;
+    a.target = '_blank';
+    a.innerHTML = `
+      <div>
+        <div class="exh-title">${exh.title}</div>
+        <div class="exh-desc">${exh.artist} — ${exh.desc}</div>
+      </div>
+      <div>
+        <div class="exh-bottom">
+          <div class="exh-date">${exh.date}</div>
+          <div class="exh-place">${exh.place}</div>
+        </div>
+        <div class="exh-link">Подробнее →</div>
+      </div>
+    `;
+    list.appendChild(a);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  filterCity('spb');
+});
+
+function openMagazine(){
+  document.getElementById('entry-screen').classList.add('opened');
+  window.scrollTo(0, 0);
+  document.body.style.overflow = 'hidden';
+  
+  setTimeout(()=>{
+    document.body.style.overflow = 'auto';
+    document.getElementById('main-site').classList.add('visible');
+    window.scrollTo(0, 0);
+    
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach((el, i) => {
+      setTimeout(() => {
+        el.classList.add('visible');
+      }, i * 100);
+    });
+  }, 1200);
+}
+
+window.addEventListener('scroll',()=>{
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = document.getElementById('progress');
+  const toTop = document.getElementById('to-top');
+  
+  if(h > 0){
+    progress.style.width = (window.scrollY / h * 100) + '%';
+  }
+  
+  if(window.scrollY > 500){
+    toTop.classList.add('visible');
+  } else {
+    toTop.classList.remove('visible');
+  }
+});
+
+document.getElementById('to-top').addEventListener('click', (e)=>{
+  e.preventDefault();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if(target){
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
